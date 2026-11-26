@@ -1,0 +1,16 @@
+name: Deploy static assets
+on:
+  push:
+    branches: [main]
+    paths: ["static/**"]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: bash tools/deploy.sh "${{ vars.S3_BUCKET }}" "${{ vars.CF_DISTRIBUTION_ID }}"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-2
